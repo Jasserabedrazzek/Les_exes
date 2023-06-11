@@ -42,13 +42,13 @@ with col2:
             url = "https://1er-secondaire.streamlit.app/"
             st.markdown(f'<a href="{url}" target="_blank">1er secondaire</a>', unsafe_allow_html=True)# Execute 1er.py
         elif classes == '2eme':
-            url = "https://1er-secondaire.streamlit.app/"
+            url = "https://2eme-secondaire.streamlit.app/"
             st.markdown(f'<a href="{url}" target="_blank">2eme secondaire</a>', unsafe_allow_html=True)
         elif classes == '3eme':
-            url = "https://1er-secondaire.streamlit.app/"
+            url = "https://3eme-secondaire.streamlit.app/"
             st.markdown(f'<a href="{url}" target="_blank">3eme secondaire</a>', unsafe_allow_html=True)
         elif classes == '4eme':
-            url = "https://1er-secondaire.streamlit.app/"
+            url = "https://4eme-secondaire.streamlit.app/"
             st.markdown(f'<a href="{url}" target="_blank">4eme secondaire</a>', unsafe_allow_html=True)
             
 st.write("---")
