@@ -26,4 +26,4 @@ with col1:
 
 # Display the CSS style
     st.markdown(button_style, unsafe_allow_html=True)
-    class1 = st.button("Button with Width", key="button1", help="Click me!")
+    class1 = st.button(" 1er ", key="button1", help="Click me!")
