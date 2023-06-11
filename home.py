@@ -20,6 +20,6 @@ with col2:
         'votre classe.',
         ('','1er', '2eme', '3eme' , '4eme'))
     if classes == '2eme' :
-        sections = se.selectbox (
+        sections = st.selectbox (
             'votre section',
             ('science', 'info', 'letter' , "sport" , "economie"))
