@@ -16,14 +16,4 @@ with col_2:
     st.header("Choisissez votre classe.")
 col1,col2,col3,col4 = st.columns(4)
 with col1:
-    button_style = """
-        <style>
-            .button-width {
-        width: 150px;
-            }
-        </style>
-        """
-
-# Display the CSS style
-    st.markdown(button_style, unsafe_allow_html=True)
-    class1 = st.button(" 1er ", key="button1", help="Click me!")
+    class1 = st.button("1er secondaire")
