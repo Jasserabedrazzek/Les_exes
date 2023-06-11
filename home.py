@@ -1,5 +1,6 @@
 import streamlit as st
-import subprocess
+import webbrowser
+
 
 st.set_page_config(
     page_title="Home",
@@ -39,7 +40,7 @@ with col2:
         nextpage = st.button('Next page')
         if nextpage:
             if classes == '1er':
-                st.warkdown("[](https://1er-secondaire.streamlit.app/")  # Execute 1er.py
+                webbrowser.open_new_tab("https://1er-secondaire.streamlit.app/")  # Execute 1er.py
             elif classes == '2eme':
                 subprocess.run(["python", "2eme.py"])  # Execute 2eme.py
             elif classes == '3eme':
