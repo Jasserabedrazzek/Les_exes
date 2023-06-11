@@ -21,3 +21,12 @@ with col2:
         ('','1er', '2eme', '3eme' , '4eme'))
     if classes != '':
         nextpage = st.button('next page')
+        if nextpage:
+            if classes == '1er':
+                pass
+            elif classes == '2eme':
+                pass
+            elif classes == '3eme':
+                pass
+            elif classes == '4eme':
+                pass
