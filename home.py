@@ -6,7 +6,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
     
 )
-st.header("Bienvenu")
+col__1,col__2,col__3 = st.columns(3)
+with col__2:
+    st.header("Bienvenu")
 st.title("---")
 col_1,col_2,col_3 = st.columns(3)
 with col_2:
