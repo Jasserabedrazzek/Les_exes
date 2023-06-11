@@ -9,17 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.markdown(
-    """
-    <style>
-    body {
-        background-image: url('static/images/5190234.jpg');
-        background-size: cover;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+
 
 col__1, col__2, col__3 = st.columns(3)
 with col__2:
