@@ -45,3 +45,6 @@ with col2:
                 pass
             elif classes == '4eme':
                 pass
+st.write("---")
+
+st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
