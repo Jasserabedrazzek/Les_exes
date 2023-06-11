@@ -37,17 +37,19 @@ with col2:
         ('', '1er', '2eme', '3eme', '4eme')
     )
     if classes != '':
-        nextpage = st.button('Next page')
-        if nextpage:
-            if classes == '1er':
-                url = "https://1er-secondaire.streamlit.app/"
-                webbrowser.open_new_tab("https://1er-secondaire.streamlit.app/")
-                st.markdown(f'<a href="{url}" target="_blank">Open URL</a>', unsafe_allow_html=True)# Execute 1er.py
-            elif classes == '2eme':
-                subprocess.run(["python", "2eme.py"])  # Execute 2eme.py
-            elif classes == '3eme':
-                subprocess.run(["python", "3eme.py"])  # Execute 3eme.py
-            elif classes == '4eme':
-                subprocess.run(["python", "4eme.py"])  # Execute 4eme.py
+        
+        if classes == '1er':
+            url = "https://1er-secondaire.streamlit.app/"
+            st.markdown(f'<a href="{url}" target="_blank">1er secondaire</a>', unsafe_allow_html=True)# Execute 1er.py
+        elif classes == '2eme':
+            url = "https://1er-secondaire.streamlit.app/"
+            st.markdown(f'<a href="{url}" target="_blank">2eme secondaire</a>', unsafe_allow_html=True)
+        elif classes == '3eme':
+            url = "https://1er-secondaire.streamlit.app/"
+            st.markdown(f'<a href="{url}" target="_blank">3eme secondaire</a>', unsafe_allow_html=True)
+        elif classes == '4eme':
+            url = "https://1er-secondaire.streamlit.app/"
+            st.markdown(f'<a href="{url}" target="_blank">4eme secondaire</a>', unsafe_allow_html=True)
+            
 st.write("---")
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
