@@ -40,7 +40,9 @@ with col2:
         nextpage = st.button('Next page')
         if nextpage:
             if classes == '1er':
-                webbrowser.open_new_tab("https://1er-secondaire.streamlit.app/")  # Execute 1er.py
+                url = "https://1er-secondaire.streamlit.app/"
+                webbrowser.open_new_tab("https://1er-secondaire.streamlit.app/")
+                st.markdown(f'<a href="{url}" target="_blank">Open URL</a>', unsafe_allow_html=True)# Execute 1er.py
             elif classes == '2eme':
                 subprocess.run(["python", "2eme.py"])  # Execute 2eme.py
             elif classes == '3eme':
