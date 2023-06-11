@@ -46,4 +46,5 @@ with col2:
                 subprocess.run(["python", "3eme.py"])  # Execute 3eme.py
             elif classes == '4eme':
                 subprocess.run(["python", "4eme.py"])  # Execute 4eme.py
+st.write("---")
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
