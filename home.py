@@ -8,10 +8,10 @@ st.set_page_config(
 )
 col__1,col__2,col__3 = st.columns(3)
 with col__2:
-    st.header("Bienvenu")
+    st.title("Bienvenu")
 
 st.write("---")
 col_1,col_2,col_3 = st.columns(3)
 with col_2:
-    st.title("Choisissez votre classe.")
+    st.header("Choisissez votre classe.")
 col1,col2,col3,col4 = st.columns(4)
