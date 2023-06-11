@@ -14,6 +14,8 @@ st.write("---")
 col_1,col_2,col_3 = st.columns(3)
 with col_2:
     st.header("Choisissez votre classe.")
-col1,col2,col3,col4 = st.columns(4)
-with col1:
-    class1 = st.button("1er secondaire")
+col1,col2,col3 = st.columns(3)
+with col2:
+    classe = st.selectbox(
+        'votre classe.',
+        ('1er', '2eme', '3eme' , '4eme'))
