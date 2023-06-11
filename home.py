@@ -19,7 +19,5 @@ with col2:
     classes = st.selectbox(
         'votre classe.',
         ('','1er', '2eme', '3eme' , '4eme'))
-    if classes == '2eme' :
-        sections = st.selectbox (
-            'votre section',
-            ('science', 'info', 'letter' , "sport" , "economie"))
+    if classes != ''
+        nextpage = st.button('next page')
