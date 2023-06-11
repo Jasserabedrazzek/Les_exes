@@ -16,6 +16,10 @@ with col_2:
     st.header("Choisissez votre classe.")
 col1,col2,col3 = st.columns(3)
 with col2:
-    classe = st.selectbox(
+    classes = st.selectbox(
         'votre classe.',
         ('','1er', '2eme', '3eme' , '4eme'))
+    if classes == '2eme' :
+        sections = se.selectbox (
+            'votre section',
+            ('science', 'info', 'letter' , "sport" , "economie"))
