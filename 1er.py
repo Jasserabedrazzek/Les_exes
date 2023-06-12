@@ -18,53 +18,6 @@ st.set_page_config(
 col1, col2, col3 = st.columns(3)
 with col2:
     st.title("1er secondaire")
-    st.write("---")
-    st.header("Les series")
+st.write("---")
+st.header("Les series")
 
-uploads = st.file_uploader("Choose a file", accept_multiple_files=True, type=["pdf", "doc", "docx", "png", "jpg"])
-
-if uploads:
-    for file in uploads:
-        with file:
-            raw_data = file.read()
-            encoding = chardet.detect(raw_data)['encoding']
-            try:
-                if not file.name.lower().endswith(('.csv', '.xls', '.xlsx', '.pdf', '.doc', '.docx', '.png', '.jpg')):
-                    st.warning(f"The file {file.name} is not supported. Please upload a CSV, XLS, PDF, DOC, or image file.")
-                    continue
-
-                if file.name.lower().endswith(('.pdf', '.doc', '.docx')):
-                    df = pd.DataFrame({'File Name': [file.name]})
-                else:
-                    df = pd.read_csv(file, encoding=encoding)
-
-                if df.empty:
-                    st.warning(f"The file {file.name} is empty.")
-                    continue
-            except pd.errors.EmptyDataError:
-                st.warning(f"The file {file.name} is empty or contains no columns.")
-                continue
-
-        # Convert DataFrame to JSON
-        json_data = df.to_json(orient='records')
-
-        # Save JSON data to a file in the json_folder
-        filename = f"{json_folder}/{file.name.split('.')[0]}.json"
-        with open(filename, 'w') as f:
-            f.write(json_data)
-
-        st.write(f"File saved as {filename}")
-
-    # Display the uploaded files
-    uploaded_files = [file for file in os.listdir(json_folder) if file.endswith('.json')]
-    for file in uploaded_files:
-        with open(os.path.join(json_folder, file), 'r') as f:
-            json_data = f.read()
-
-        st.write("### File:", file)
-        # Parse JSON data
-        df = pd.read_json(json_data)
-        st.dataframe(df)
-
-        # Provide download link for the JSON file
-        st.download_button("Download JSON", os.path.join(json_folder, file))
