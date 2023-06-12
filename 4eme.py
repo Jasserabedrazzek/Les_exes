@@ -7,7 +7,7 @@ import time
 
 st.set_page_config(
     page_title="4eme secondaire",
-    page_icon=":regional_indicator_d:",
+    page_icon="📘",
     layout="centered",
     initial_sidebar_state="expanded",
 )
