@@ -21,7 +21,7 @@ with col2:
     st.write("---")
     st.header("Les series")
 
-uploads = st.file_uploader("Choose a file", accept_multiple_files=True)
+uploads = st.file_uploader("Choose a file", accept_multiple_files=True, type=["pdf", "doc", "docx", "png", "jpg"])
 
 if uploads:
     for file in uploads:
@@ -29,17 +29,11 @@ if uploads:
             raw_data = file.read()
             encoding = chardet.detect(raw_data)['encoding']
             try:
-                if file.name.endswith('.csv'):
-                    df = pd.read_csv(file, encoding=encoding)
-                elif file.name.endswith(('.xls', '.xlsx')):
-                    df = pd.read_excel(file)
-                else:
-                    st.warning(f"The file {file.name} is not supported. Please upload a CSV, XLS, or XLSX file.")
+                if file.name.endswith(('.pdf', '.doc', '.docx')):
+                    st.warning(f"The file {file.name} is not supported. Please upload a CSV, XLS, PDF, DOC, or image file.")
                     continue
 
-                if df.empty:
-                    st.warning(f"The file {file.name} is empty.")
-                    continue
+                df = pd.DataFrame({'File Name': [file.name]})
             except pd.errors.EmptyDataError:
                 st.warning(f"The file {file.name} is empty or contains no columns.")
                 continue
