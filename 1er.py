@@ -39,7 +39,7 @@ def save_file_to_db(file):
 def retrieve_file_from_db(file_name):
     c.execute("SELECT data FROM files WHERE name=?", (file_name,))
     file_data = c.fetchone()[0]
-    return file_data
+    return file_data.tobytes()
 
 # Create an upload button
 file = st.file_uploader("Upload files (PDF, DOC, images)", type=["pdf", "doc", "jpg", "jpeg", "png"])
