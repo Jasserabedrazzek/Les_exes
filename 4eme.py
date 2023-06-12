@@ -24,15 +24,15 @@ c = conn.cursor()
 
 # Create a table to store file details
 c.execute('''CREATE TABLE IF NOT EXISTS files
-             (name TEXT, data BLOB, option TEXT)''')
+             (name TEXT, data BLOB)''')
 conn.commit()
 
 # Function to save uploaded file to the database
-def save_file_to_db(file, option):
+def save_file_to_db(file):
     with open(file, 'rb') as f:
         file_data = f.read()
     file_name = Path(file).name
-    c.execute("INSERT INTO files (name, data, option) VALUES (?, ?, ?)", (file_name, sqlite3.Binary(file_data), option))
+    c.execute("INSERT INTO files (name, data) VALUES (?, ?)", (file_name, sqlite3.Binary(file_data)))
     conn.commit()
 
 # Function to retrieve file from the database
@@ -42,15 +42,13 @@ def retrieve_file_from_db(file_name):
     return file_data
 
 # Create an upload button
-option = st.selectbox("Select an option", ("Bac math", "Bac science", "Bac info", "Bac eco", "Bac letter", "Bac tech"))
-st.write("---")
 file = st.file_uploader("Upload files (PDF, DOC, images)", type=["pdf", "doc", "jpg", "jpeg", "png"])
 
 if file is not None:
     file_path = os.path.join(upload_folder, file.name)
     with open(file_path, "wb") as f:
         f.write(file.getbuffer())
-    save_file_to_db(file_path, option)
+    save_file_to_db(file_path)
     st.success("File uploaded successfully.")
 
 # Display uploaded files
@@ -66,5 +64,4 @@ if len(uploaded_files) > 0:
             href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
             st.markdown(href, unsafe_allow_html=True)
 st.write("---")
-
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
