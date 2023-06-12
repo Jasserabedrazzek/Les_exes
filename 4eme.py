@@ -16,8 +16,15 @@ st.title("4eme secondaire")
 st.write("---")
 st.header("Upload File PDF or DOC")
 
-upload_folder = "uploads"
-os.makedirs(upload_folder, exist_ok=True)
+# Function to create a folder for file uploads
+def create_upload_folder(folder_name):
+    upload_folder = os.path.join(os.getcwd(), folder_name)
+    os.makedirs(upload_folder, exist_ok=True)
+    return upload_folder
+
+# Get the folder name from the user
+upload_folder_name = st.text_input("Enter the name of the folder for file uploads", "uploads")
+upload_folder = create_upload_folder(upload_folder_name)
 
 # Create a database connection
 conn = sqlite3.connect('file_uploads.db')
