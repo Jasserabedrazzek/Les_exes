@@ -32,7 +32,7 @@ def save_file_to_db(file):
     with open(file, 'rb') as f:
         file_data = f.read()
     file_name = Path(file).name
-    c.execute("INSERT INTO files (name, data) VALUES (?, ?)", (file_name, file_data))
+    c.execute("INSERT INTO files (name, data) VALUES (?, ?)", (file_name, sqlite3.Binary(file_data)))
     conn.commit()
 
 # Function to retrieve file from the database
