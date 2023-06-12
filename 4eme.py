@@ -59,10 +59,12 @@ def retrieve_file_from_db(file_name):
     return None
 
 # Create an upload button
-file = st.file_uploader("Upload files (PDF, DOC)", type=["pdf", "doc"])
+file = st.file_uploader("Upload files (PDF, DOC, images)", type=["pdf", "doc", "jpg", "jpeg", "png"])
 
 if file is not None:
-    file_path = os.path.join(upload_folder, file.name)
+    # Prompt the user to enter a new name for the file
+    new_file_name = st.text_input("Enter a new name for the file (optional)", value=file.name)
+    file_path = os.path.join(upload_folder, new_file_name)
     with open(file_path, "wb") as f:
         f.write(file.getbuffer())
     save_file_to_db_with_retry(file_path)
