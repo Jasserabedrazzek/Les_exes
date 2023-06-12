@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from io import StringIO
 import json
 import os
 
@@ -34,7 +33,7 @@ with col2:
     # Display the uploaded files
     uploaded_files = [file for file in os.listdir() if file.endswith('.json')]
     for file in uploaded_files:
-        with open(file, 'r') as f:
+        with open(file, 'r', encoding='utf-8-sig') as f:
             json_data = f.read()
         st.write("### File:", file)
         # Parse JSON data
