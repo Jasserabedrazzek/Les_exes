@@ -42,7 +42,7 @@ def retrieve_file_from_db(file_name):
     return file_data
 
 # Create an upload button
-option = st.selectbox("Select an option", ("math", "sc", "info", "eco", "letter", "tech"))
+option = st.selectbox("Select an option", ("Bac math", "Bac science", "Bac info", "Bac eco", "Bac letter", "Bac tech"))
 st.write("---")
 file = st.file_uploader("Upload files (PDF, DOC, images)", type=["pdf", "doc", "jpg", "jpeg", "png"])
 
@@ -65,6 +65,6 @@ if len(uploaded_files) > 0:
             b64_data = base64.b64encode(file_data).decode()
             href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
             st.markdown(href, unsafe_allow_html=True)
-        st.write("---")
+st.write("---")
 
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
