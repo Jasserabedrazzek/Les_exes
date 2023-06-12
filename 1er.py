@@ -63,3 +63,5 @@ if len(uploaded_files) > 0:
             b64_data = base64.b64encode(file_data).decode()
             href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
             st.markdown(href, unsafe_allow_html=True)
+st.write("---")
+st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
