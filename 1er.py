@@ -15,10 +15,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-col1, col2, col3 = st.columns(3)
-with col2:
-    st.title("1er secondaire")
+st.title("1er secondaire")
 st.write("---")
-with col2:
-    st.header("Les series")
+st.header("Les series")
 
