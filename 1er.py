@@ -14,9 +14,8 @@ st.set_page_config(
 col1, col2, col3 = st.columns(3)
 with col2:
     st.title("1er secondaire")
-st.write("---")
-st.header("Les series")
-
+    st.write("---")
+    st.header("Les series")
 
 uploads = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
 
@@ -54,3 +53,6 @@ if uploads:
         # Parse JSON data
         df = pd.read_json(json_data)
         st.dataframe(df)
+
+        # Provide download link for the JSON file
+        st.download_button("Download JSON", file)
