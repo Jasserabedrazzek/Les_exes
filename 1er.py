@@ -6,13 +6,13 @@ import sqlite3
 import time
 
 st.set_page_config(
-    page_title="2eme secondaire",
+    page_title="1er secondaire",
     page_icon="",
     layout="centered",
     initial_sidebar_state="expanded",
 )
 
-st.title("2eme secondaire")
+st.title("1er secondaire")
 st.write("---")
 st.header("Les séries")
 
