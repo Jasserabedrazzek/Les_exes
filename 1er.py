@@ -16,26 +16,30 @@ with col2:
     st.write("---")
     st.header("Les series")
   
-    st.write("---")
-    uploads = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
+uploads = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
   
-    if uploads:
-        for file in uploads:
-            df = pd.read_csv(file)
+if uploads:
+    
+    for file in uploads:
+        
+        df = pd.read_csv(file)
             # Convert DataFrame to JSON
-            json_data = df.to_json(orient='records')
+        json_data = df.to_json(orient='records')
             # Save JSON data to a file
-            filename = f"{file.name.split('.')[0]}.json"
-            with open(filename, 'w') as f:
-                f.write(json_data)
+        filename = f"{file.name.split('.')[0]}.json"
+        with open(filename, 'w') as f:
+            
+            f.write(json_data)
             st.write(f"File saved as {filename}")
   
     # Display the uploaded files
-    uploaded_files = [file for file in os.listdir() if file.endswith('.json')]
-    for file in uploaded_files:
-        with open(file, 'r', encoding='utf-8-sig') as f:
-            json_data = f.read()
-        st.write("### File:", file)
+uploaded_files = [file for file in os.listdir() if file.endswith('.json')]
+for file in uploaded_files:
+    
+    with open(file, 'r', encoding='utf-8-sig') as f:
+        
+        json_data = f.read()
+    st.write("### File:", file)
         # Parse JSON data
-        df = pd.read_json(json_data)
-        st.dataframe(df)
+    df = pd.read_json(json_data)
+    st.dataframe(df)
