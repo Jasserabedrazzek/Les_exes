@@ -28,7 +28,7 @@ with col2:
     )
     if classes != ['1er', '2eme', '3eme', '4eme']:
         
-        if classes == '1er'':
+        if classes == '1er':
             url = "https://1er-secondaire.streamlit.app/"
             st.markdown(f'<a href="{url}" target="_blank">1er secondaire</a>', unsafe_allow_html=True)# Execute 1er.py
         elif classes == '2eme':
