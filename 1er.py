@@ -19,5 +19,6 @@ col1, col2, col3 = st.columns(3)
 with col2:
     st.title("1er secondaire")
 st.write("---")
-st.header("Les series")
+with col2:
+    st.header("Les series")
 
