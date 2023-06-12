@@ -57,4 +57,9 @@ if len(uploaded_files) > 0:
     st.header("Uploaded Files")
     for uploaded_file in uploaded_files:
         file_data = retrieve_file_from_db(uploaded_file)
-        st.download_button(uploaded_file, file_data)
+        st.write(uploaded_file)
+        download_button = st.button("Download", key=uploaded_file)
+        if download_button:
+            b64_data = base64.b64encode(file_data).decode()
+            href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
+            st.markdown(href, unsafe_allow_html=True)
