@@ -14,8 +14,8 @@ st.set_page_config(
 col1, col2, col3 = st.columns(3)
 with col2:
     st.title("1er secondaire")
-    st.write("---")
-    st.header("Les series")
+st.write("---")
+st.header("Les series")
 
     st.write("---")
 uploads = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
@@ -25,7 +25,14 @@ if uploads:
         with file:
             raw_data = file.read()
             encoding = chardet.detect(raw_data)['encoding']
-            df = pd.read_csv(file, encoding=encoding)
+            try:
+                df = pd.read_csv(file, encoding=encoding)
+                if df.empty:
+                    st.warning(f"The file {file.name} is empty.")
+                    continue
+            except pd.errors.EmptyDataError:
+                st.warning(f"The file {file.name} is empty or contains no columns.")
+                continue
 
         # Convert DataFrame to JSON
         json_data = df.to_json(orient='records')
