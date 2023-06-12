@@ -24,7 +24,7 @@ col1, col2, col3 = st.columns(3)
 with col2:
     classes = st.selectbox(
         'Votre classe.',
-        ('', '1er', '2eme', '3eme', '4eme')
+        ('Votre classe.', '1er', '2eme', '3eme', '4eme')
     )
     if classes != ['1er', '2eme', '3eme', '4eme']:
         
