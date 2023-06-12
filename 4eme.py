@@ -41,9 +41,9 @@ def save_file_to_db_with_retry(file):
             st.success("File uploaded successfully.")
             break
         except sqlite3.OperationalError as e:
-            if 'database is locked' in str(e).lower() and retries < 5:
+            if 'database is locked' in str(e).lower() and retries < 10:
                 retries += 1
-                delay = 2 ** retries  # exponential backoff
+                delay = 2 ** (retries + 1)  # exponential backoff
                 st.warning(f"Database is locked. Retrying in {delay} seconds...")
                 time.sleep(delay)
             else:
