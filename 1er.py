@@ -4,6 +4,10 @@ import json
 import os
 import chardet
 
+# Create a folder to store the JSON files
+json_folder = "json_files"
+os.makedirs(json_folder, exist_ok=True)
+
 st.set_page_config(
     page_title="1er secondaire",
     page_icon="",
@@ -36,17 +40,17 @@ if uploads:
         # Convert DataFrame to JSON
         json_data = df.to_json(orient='records')
 
-        # Save JSON data to a file
-        filename = f"{file.name.split('.')[0]}.json"
+        # Save JSON data to a file in the json_folder
+        filename = f"{json_folder}/{file.name.split('.')[0]}.json"
         with open(filename, 'w') as f:
             f.write(json_data)
 
         st.write(f"File saved as {filename}")
 
     # Display the uploaded files
-    uploaded_files = [file for file in os.listdir() if file.endswith('.json')]
+    uploaded_files = [file for file in os.listdir(json_folder) if file.endswith('.json')]
     for file in uploaded_files:
-        with open(file, 'r') as f:
+        with open(os.path.join(json_folder, file), 'r') as f:
             json_data = f.read()
 
         st.write("### File:", file)
@@ -55,4 +59,4 @@ if uploads:
         st.dataframe(df)
 
         # Provide download link for the JSON file
-        st.download_button("Download JSON", file)
+        st.download_button("Download JSON", os.path.join(json_folder, file))
