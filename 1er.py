@@ -5,9 +5,6 @@ import base64
 import sqlite3
 
 
-# Create a folder to store the JSON files
-json_folder = "json_files"
-os.makedirs(json_folder, exist_ok=True)
 
 st.set_page_config(
     page_title="1er secondaire",
