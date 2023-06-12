@@ -14,17 +14,14 @@ st.set_page_config(
 
 st.title("4eme secondaire")
 st.write("---")
-st.header("Upload File PDF or DOC or image")
+st.header("Upload File PDF or DOC")
 
-# Function to create a folder for file uploads
-def create_upload_folder(folder_name):
-    upload_folder = os.path.join(os.getcwd(), folder_name)
+# Create a folder for uploads
+upload_folder = "uploads"
+create_folder = st.button("Create Upload Folder")
+if create_folder:
     os.makedirs(upload_folder, exist_ok=True)
-    return upload_folder
-
-# Get the folder name from the user
-upload_folder_name = st.text_input("Enter the name of the folder for file uploads", "uploads")
-upload_folder = create_upload_folder(upload_folder_name)
+    st.success("Upload folder created successfully.")
 
 # Create a database connection
 conn = sqlite3.connect('file_uploads.db')
