@@ -16,12 +16,8 @@ st.title("4eme secondaire")
 st.write("---")
 st.header("Upload File PDF or DOC")
 
-# Create a folder for uploads
 upload_folder = "uploads"
-create_folder = st.button("Create Upload Folder")
-if create_folder:
-    os.makedirs(upload_folder, exist_ok=True)
-    st.success("Upload folder created successfully.")
+os.makedirs(upload_folder, exist_ok=True)
 
 # Create a database connection
 conn = sqlite3.connect('file_uploads.db')
