@@ -40,7 +40,7 @@ for file in uploaded_files:
         encoding = chardet.detect(raw_data)['encoding']
     with open(file, 'r', encoding=encoding) as f:
         json_data = f.read()
-   st.write("### File:", file)
+    st.write("### File:", file)
         # Parse JSON data
-   df = pd.read_json(json_data)
-   st.dataframe(df)
+    df = pd.read_json(json_data)
+    st.dataframe(df)
