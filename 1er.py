@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from io import StringIO
 import json
+import os
 
 st.set_page_config(
     page_title="1er secondaire",
@@ -10,17 +11,16 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-col1,col2,col3 = st.columns(3)
-with col2 :
-  st.title("1er secondaire")
-  st.write("---")
-  st.header("Les series")
+col1, col2, col3 = st.columns(3)
+with col2:
+    st.title("1er secondaire")
+    st.write("---")
+    st.header("Les series")
   
+    st.write("---")
+    uploads = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
   
-
-st.write("---")
-uploads = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
-if uploads:
+    if uploads:
         for file in uploads:
             df = pd.read_csv(file)
             # Convert DataFrame to JSON
