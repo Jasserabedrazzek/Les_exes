@@ -14,7 +14,7 @@ st.set_page_config(
 
 st.title("4eme secondaire")
 st.write("---")
-st.header("Les séries")
+st.header("Upload File PDF or DOC")
 
 upload_folder = "uploads"
 os.makedirs(upload_folder, exist_ok=True)
@@ -68,7 +68,7 @@ if file is not None:
 # Display uploaded files
 uploaded_files = [f for f in os.listdir(upload_folder) if os.path.isfile(os.path.join(upload_folder, f))]
 if len(uploaded_files) > 0:
-    st.header("Uploaded Files")
+    st.header("Les séries")
     for uploaded_file in uploaded_files:
         file_data = retrieve_file_from_db(uploaded_file)
         st.write(uploaded_file)
