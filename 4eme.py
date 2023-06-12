@@ -14,7 +14,7 @@ st.set_page_config(
 
 st.title("4eme secondaire")
 st.write("---")
-st.header("Upload File PDF or DOC")
+st.header("Upload File PDF or DOC or image")
 
 # Function to create a folder for file uploads
 def create_upload_folder(folder_name):
@@ -64,7 +64,7 @@ def retrieve_file_from_db(file_name):
     return file_data
 
 # Create an upload button
-file = st.file_uploader("Upload files (PDF, DOC)", type=["pdf", "doc"])
+file = st.file_uploader("Upload files (PDF, DOC, images)", type=["pdf", "doc", "jpg", "jpeg", "png"])
 
 if file is not None:
     file_path = os.path.join(upload_folder, file.name)
