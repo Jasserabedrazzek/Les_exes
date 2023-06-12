@@ -17,7 +17,7 @@ with col2:
 st.write("---")
 st.header("Les series")
 
-    st.write("---")
+
 uploads = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
 
 if uploads:
