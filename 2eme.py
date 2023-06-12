@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.title("1er secondaire")
+st.title("2eme secondaire")
 st.write("---")
 st.header("Les séries")
 
