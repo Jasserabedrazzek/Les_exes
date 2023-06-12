@@ -4,8 +4,6 @@ from pathlib import Path
 import base64
 import sqlite3
 
-
-
 st.set_page_config(
     page_title="1er secondaire",
     page_icon="",
@@ -15,7 +13,7 @@ st.set_page_config(
 
 st.title("1er secondaire")
 st.write("---")
-st.header("Les series")
+st.header("Les séries")
 
 upload_folder = "uploads"
 os.makedirs(upload_folder, exist_ok=True)
@@ -42,18 +40,6 @@ def retrieve_file_from_db(file_name):
     c.execute("SELECT data FROM files WHERE name=?", (file_name,))
     file_data = c.fetchone()[0]
     return file_data
-
-# Streamlit app
-st.set_page_config(
-    page_title="1er secondaire",
-    page_icon="",
-    layout="centered",
-    initial_sidebar_state="expanded",
-)
-
-st.title("1er secondaire")
-st.write("---")
-st.header("Les séries")
 
 # Create an upload button
 file = st.file_uploader("Upload files (PDF, DOC, images)", type=["pdf", "doc", "jpg", "jpeg", "png"])
