@@ -29,11 +29,18 @@ if uploads:
             raw_data = file.read()
             encoding = chardet.detect(raw_data)['encoding']
             try:
-                if file.name.endswith(('.pdf', '.doc', '.docx')):
+                if not file.name.lower().endswith(('.csv', '.xls', '.xlsx', '.pdf', '.doc', '.docx', '.png', '.jpg')):
                     st.warning(f"The file {file.name} is not supported. Please upload a CSV, XLS, PDF, DOC, or image file.")
                     continue
 
-                df = pd.DataFrame({'File Name': [file.name]})
+                if file.name.lower().endswith(('.pdf', '.doc', '.docx')):
+                    df = pd.DataFrame({'File Name': [file.name]})
+                else:
+                    df = pd.read_csv(file, encoding=encoding)
+
+                if df.empty:
+                    st.warning(f"The file {file.name} is empty.")
+                    continue
             except pd.errors.EmptyDataError:
                 st.warning(f"The file {file.name} is empty or contains no columns.")
                 continue
