@@ -5,13 +5,13 @@ import base64
 import sqlite3
 
 st.set_page_config(
-    page_title="2eme secondaire",
+    page_title="3eme secondaire",
     page_icon="",
     layout="centered",
     initial_sidebar_state="expanded",
 )
 
-st.title("2eme secondaire")
+st.title("3eme secondaire")
 st.write("---")
 st.header("Les séries")
 
