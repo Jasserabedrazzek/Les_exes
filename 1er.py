@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import json
 import os
+import chardet
 
 st.set_page_config(
     page_title="1er secondaire",
@@ -33,7 +34,10 @@ with col2:
     # Display the uploaded files
     uploaded_files = [file for file in os.listdir() if file.endswith('.json')]
     for file in uploaded_files:
-        with open(file, 'r', encoding='latin-1') as f:
+        with open(file, 'rb') as f:
+            raw_data = f.read()
+            encoding = chardet.detect(raw_data)['encoding']
+        with open(file, 'r', encoding=encoding) as f:
             json_data = f.read()
         st.write("### File:", file)
         # Parse JSON data
