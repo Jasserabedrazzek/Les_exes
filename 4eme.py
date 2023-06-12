@@ -59,7 +59,7 @@ def retrieve_file_from_db(file_name):
     return None
 
 # Create an upload button
-file = st.file_uploader("Upload files (PDF, DOC, images)", type=["pdf", "doc", "jpg", "jpeg", "png"])
+file = st.file_uploader("Upload files (PDF, DOC)", type=["pdf", "doc"])
 
 if file is not None:
     # Prompt the user to enter a new name for the file
