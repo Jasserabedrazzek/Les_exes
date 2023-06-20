@@ -82,32 +82,6 @@ if len(uploaded_files) > 0:
                 b64_data = base64.b64encode(file_data).decode()
                 href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
                 st.markdown(href, unsafe_allow_html=True)
-st.write("---")
-Url = st.text_input("Liens ")
-# Function to save URL to the database with retry mechanism
-def save_url_to_db_with_retry(url):
-    retries = 0
-    while True:
-        try:
-            c.execute("INSERT INTO files (name, data) VALUES (?, ?)", (url, None))
-            conn.commit()
-            st.success("URL saved successfully.")
-            break
-        except sqlite3.OperationalError as e:
-            if 'database is locked' in str(e).lower() and retries < 10:
-                retries += 1
-                delay = 2 ** (retries + 1)  # exponential backoff
-                st.warning(f"Database is locked. Retrying in {delay} seconds...")
-                time.sleep(delay)
-            else:
-                st.error("Failed to save URL. Please try again later.")
-                break
-
-# Create a button to save the input URL
-save_url_button = st.button("Save URL")
-
-if save_url_button:
-    save_url_to_db_with_retry(Url)
 
 st.write("---")
 
