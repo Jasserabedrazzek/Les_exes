@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import shutil
 from PIL import Image
+import sqlite3
 
 # Create a directory to store uploaded files
 UPLOAD_DIRECTORY = "uploads"
@@ -15,6 +16,13 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
 )
+
+# Create a database connection
+conn = sqlite3.connect("urls.db")
+c = conn.cursor()
+
+# Create a table to store URLs if it doesn't exist
+c.execute("CREATE TABLE IF NOT EXISTS urls (url TEXT)")
 
 # Function to handle file uploads
 def handle_file_upload(file, file_type):
@@ -33,16 +41,19 @@ def download_file(file_path, file_name):
         file_bytes = f.read()
     st.download_button("Download", file_bytes, file_name)
 
+# Function to save URL in the database
+def save_url(url):
+    c.execute("INSERT INTO urls (url) VALUES (?)", (url,))
+    conn.commit()
+    st.success("URL saved successfully!")
+
 # Display the title
 st.title('Bac 2024 doc')
 
-# Display the URL input and save button
-url = st.text_input("Enter a URL")
-save_url = st.button("Save URL")
-
-# Save the URL to the page when the button is clicked
-if save_url:
-    st.write(url)
+# Display the URL input field and save button
+url = st.text_input("Enter a URL:")
+if st.button("Save URL") and url:
+    save_url(url)
 
 # Display the upload buttons
 file_type = st.radio("Select file type:", ("pdf", "doc", "image"))
@@ -62,3 +73,6 @@ for file_name in uploaded_files:
         image = Image.open(file_path)
         st.image(image)
         download_file(file_path, file_name)
+
+# Close the database connection
+conn.close()
