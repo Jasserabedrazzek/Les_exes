@@ -25,14 +25,14 @@ c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS urls (url text)''')
 
 # Function to handle file uploads
-def handle_file_upload(file, file_type):
+def handle_file_upload(file):
     file_name = file.name
     file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
     with open(file_path, "wb") as f:
         f.write(file.getbuffer())
-    if file_type == "pdf" or file_type == "doc":
+    if file_name.endswith((".pdf", ".doc")):
         st.success(f"File uploaded: {file_name}")
-    elif file_type == "image":
+    elif file_name.endswith((".jpg", ".jpeg", ".png")):
         st.success(f"Image uploaded: {file_name}")
 
 # Function to download a file
@@ -49,15 +49,11 @@ def save_url(url):
 # Display the title
 st.title('Bac 2024 doc')
 
-# Display the PDF upload button
-pdf_file = st.file_uploader("Upload PDF or DOC file", type=["pdf", "doc"])
-if pdf_file is not None:
-    handle_file_upload(pdf_file, "pdf")
-
-# Display the image upload button
-image_file = st.file_uploader("Upload Image file", type=["jpg", "jpeg", "png"])
-if image_file is not None:
-    handle_file_upload(image_file, "image")
+# Display the file upload section
+file = st.file_uploader("Upload PDF, DOC, or Image file", accept_multiple_files=True)
+if file is not None:
+    for uploaded_file in file:
+        handle_file_upload(uploaded_file)
 
 # Display the URL input and save button
 url = st.text_input("Enter URL")
@@ -72,9 +68,9 @@ st.subheader("Uploaded Files")
 for file_name in uploaded_files:
     st.write(file_name)
     file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
-    if file_name.endswith(".pdf") or file_name.endswith(".doc"):
+    if file_name.endswith((".pdf", ".doc")):
         download_file(file_path, file_name)
-    elif file_name.endswith(".jpg") or file_name.endswith(".jpeg") or file_name.endswith(".png"):
+    elif file_name.endswith((".jpg", ".jpeg", ".png")):
         image = Image.open(file_path)
         st.image(image)
         download_file(file_path, file_name)
