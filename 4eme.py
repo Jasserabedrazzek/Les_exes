@@ -1,15 +1,15 @@
 import streamlit as st
 import sqlite3
 
-# Connect to the SQLite database
-conn = sqlite3.connect('uploaded_files.db')
+# Create a SQLite database connection
+conn = sqlite3.connect('file_uploads.db')
 c = conn.cursor()
 
-# Create the 'files' table if it doesn't exist
-c.execute('''CREATE TABLE IF NOT EXISTS files
+# Create a table to store file uploads
+c.execute('''CREATE TABLE IF NOT EXISTS uploads
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
-              file BLOB,
-              file_type TEXT)''')
+              filename TEXT,
+              filetype TEXT)''')
 conn.commit()
 
 # Set Streamlit page configuration
@@ -19,46 +19,38 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
 )
-
-# Function to insert file into the database
-def insert_file(file, file_type):
-    c.execute("INSERT INTO files (file, file_type) VALUES (?, ?)", (file, file_type))
-    conn.commit()
-
-# Function to retrieve all uploaded files from the database
-def get_uploaded_files():
-    c.execute("SELECT * FROM files")
-    return c.fetchall()
-
-# Streamlit web application
 st.title('Bac 2024 doc')
 
-# Upload PDF or DOC button
-uploaded_file = st.file_uploader("Upload PDF or DOC file", type=["pdf", "docx"])
+# File upload and database insertion functions
+def upload_file(file, filetype):
+    with open(file.name, 'wb') as f:
+        f.write(file.getbuffer())
+    c.execute("INSERT INTO uploads (filename, filetype) VALUES (?, ?)", (file.name, filetype))
+    conn.commit()
+
+# Display uploaded files and provide download buttons
+def display_files():
+    c.execute("SELECT filename, filetype FROM uploads")
+    files = c.fetchall()
+    for file in files:
+        st.write(file[0])
+        if file[1] in ('pdf', 'doc'):
+            st.button('Download', key=file[0], on_click=download_file, args=(file[0],))
+        elif file[1] == 'image':
+            st.image(file[0])
+
+# Download file
+def download_file(filename):
+    st.markdown(f'<a href="file_uploads/{filename}" download>Click here to download</a>', unsafe_allow_html=True)
+
+# Sidebar buttons for file upload
+uploaded_file = st.sidebar.file_uploader("Upload PDF or DOC file", type=['pdf', 'doc'])
 if uploaded_file is not None:
-    file_type = uploaded_file.type.split('/')[1]
-    insert_file(uploaded_file.read(), file_type)
-    st.success('File uploaded successfully!')
+    upload_file(uploaded_file, uploaded_file.type.split('/')[-1])
 
-# Upload image button
-uploaded_image = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg"])
+uploaded_image = st.sidebar.file_uploader("Upload Image file", type=['png', 'jpg', 'jpeg'])
 if uploaded_image is not None:
-    file_type = uploaded_image.type.split('/')[1]
-    insert_file(uploaded_image.read(), file_type)
-    st.success('Image uploaded successfully!')
+    upload_file(uploaded_image, 'image')
 
-# Show uploaded files
-uploaded_files = get_uploaded_files()
-for file in uploaded_files:
-    file_id, _, file_type = file
-    if file_type in ["pdf", "docx"]:
-        st.write(f"File ID: {file_id}")
-        download_button = st.button("Download", key=f"download_{file_id}")
-        if download_button:
-            st.download_button(label="Download", data=file[1], file_name=f"file.{file_type}")
-    elif file_type in ["png", "jpg", "jpeg"]:
-        st.write(f"File ID: {file_id}")
-        st.image(file[1], use_column_width=True)
-
-# Close the database connection
-conn.close()
+# Display uploaded files
+display_files()
