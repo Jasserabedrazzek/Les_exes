@@ -48,7 +48,12 @@ def display_documents():
     if documents:
         st.subheader("Uploaded Documents:")
         for doc in documents:
-            st.write(doc[1])
+            download_url = get_download_url(doc[1])
+            st.markdown(f"- [{doc[1]}]({download_url})")
+
+# Get the download URL for a file
+def get_download_url(filename):
+    return f"uploads/{filename}"
 
 # Download file function
 def download_file(filename):
