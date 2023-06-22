@@ -1,84 +1,74 @@
 import streamlit as st
 import os
-from pathlib import Path
-import base64
 import sqlite3
-import time
 
+# Create a connection to the SQLite database
+conn = sqlite3.connect('documents.db')
+c = conn.cursor()
+
+# Create a table to store the uploaded documents
+c.execute('''
+    CREATE TABLE IF NOT EXISTS documents (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        filename TEXT
+    )
+''')
+
+# Set Streamlit page configuration
 st.set_page_config(
-    page_title="4eme secondaire",
-    page_icon="",
+    page_title="4eme secondaire Pdf",
     layout="centered",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="expanded"
 )
 
-st.title("Bac 2024")
-st.write("---")
-st.header("Upload Files PDF or Doc ")
+# Display the page title
+st.title('Bac 2024 doc')
 
-upload_folder = "uploads"
-os.makedirs(upload_folder, exist_ok=True)
+# Upload file function
+def upload_file():
+    uploaded_file = st.file_uploader("Upload PDF or DOC file", type=["pdf", "docx"], accept_multiple_files=True)
+    if uploaded_file is not None:
+        for file in uploaded_file:
+            filename = file.name
+            save_uploaded_file(file, filename)
+            # Save the filename to the database
+            c.execute("INSERT INTO documents (filename) VALUES (?)", (filename,))
+            conn.commit()
+        st.success("File(s) uploaded successfully!")
 
-# Function to save uploaded file to the database with retry mechanism
-def save_file_to_db_with_retry(file_path, file_name, file_data):
-    retries = 0
-    while True:
-        try:
-            with sqlite3.connect('file_uploads.db') as conn:
-                c = conn.cursor()
-                c.execute("INSERT INTO files (name, data) VALUES (?, ?)", (file_name, sqlite3.Binary(file_data)))
-            st.success("File uploaded successfully.")
-            break
-        except sqlite3.OperationalError as e:
-            if 'database is locked' in str(e).lower() and retries < 5:
-                retries += 1
-                delay = 2 ** retries  # exponential backoff
-                st.warning(f"Database is locked. Retrying in {delay} seconds...")
-                time.sleep(delay)
-            else:
-                st.error("Failed to upload file. Please try again later.")
-                break
+# Save the uploaded file to a folder
+def save_uploaded_file(uploaded_file, filename):
+    with open(os.path.join("uploads", filename), "wb") as f:
+        f.write(uploaded_file.getbuffer())
 
-# Function to retrieve file from the database
-def retrieve_file_from_db(file_name):
-    with sqlite3.connect('file_uploads.db') as conn:
-        c = conn.cursor()
-        c.execute("SELECT data FROM files WHERE name=?", (file_name,))
-        row = c.fetchone()
-        if row is not None:
-            file_data = row[0]
-            return file_data
-        else:
-            return None
+# Display the uploaded documents
+def display_documents():
+    c.execute("SELECT * FROM documents")
+    documents = c.fetchall()
+    if documents:
+        st.subheader("Uploaded Documents:")
+        for doc in documents:
+            st.write(doc[1])
 
-# Create a database connection and table if not exists
-with sqlite3.connect('file_uploads.db') as conn:
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS files
-                 (name TEXT, data BLOB)''')
+# Download file function
+def download_file(filename):
+    st.markdown(f'<a href="uploads/{filename}" download="{filename}">Download {filename}</a>', unsafe_allow_html=True)
 
-# Create an upload button
-file = st.file_uploader("Upload files (PDF, DOC)", type=["pdf", "doc"])
+# Display the uploaded documents and download buttons
+display_documents()
+if st.button("Refresh"):
+    display_documents()
 
-if file is not None:
-    file_path = os.path.join(upload_folder, file.name)
-    with open(file_path, "wb") as f:
-        f.write(file.getbuffer())
-    save_file_to_db_with_retry(file_path, file.name, file.getbuffer())
+# Display the upload file section
+st.subheader("Upload File(s):")
+upload_file()
 
-# Display uploaded files
-uploaded_files = [f for f in os.listdir(upload_folder) if os.path.isfile(os.path.join(upload_folder, f))]
-if len(uploaded_files) > 0:
-    st.header("Les séries")
-    for uploaded_file in uploaded_files:
-        file_data = retrieve_file_from_db(uploaded_file)
-        if file_data is not None:
-            st.write(uploaded_file)
-            download_button = st.button("Download", key=uploaded_file)
-            if download_button:
-                b64_data = base64.b64encode(file_data).decode()
-                href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
-                st.markdown(href, unsafe_allow_html=True)
+# Download file section
+st.subheader("Download File(s):")
+c.execute("SELECT * FROM documents")
+documents = c.fetchall()
+for doc in documents:
+    download_file(doc[1])
 
-st.write("---")
-st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
+# Close the database connection
+conn.close()
