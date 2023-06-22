@@ -45,11 +45,9 @@ if result:
     image_id, image_blob, image_url = result
     if image_blob:
         st.image(image_blob, caption="Uploaded Image")
+        st.download_button("Download Image", data=image_blob, file_name="image.png")
     elif image_url:
         st.image(image_url, caption="URL Image")
-
-    # Create a button to download the image
-    st.download_button("Download Image", data=image_blob, file_name="image.png")
 
 # Close the database connection
 cursor.close()
