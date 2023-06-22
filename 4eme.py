@@ -60,6 +60,12 @@ def retrieve_file_from_db(file_name):
     else:
         st.error("Failed to retrieve file from the database.")
 
+# Function to delete file from the database
+def delete_file_from_db(file_name):
+    c.execute("DELETE FROM files WHERE name=?", (file_name,))
+    conn.commit()
+    st.success("File deleted successfully.")
+
 # Create an upload button
 file = st.file_uploader("Upload files (PDF, DOC)", type=["pdf", "doc"])
 
@@ -78,12 +84,17 @@ if len(uploaded_files) > 0:
         if file_data is not None:
             st.write(uploaded_file)
             download_button = st.button("Download", key=uploaded_file)
+            delete_button = st.button("Delete", key=f"delete_{uploaded_file}")
             if download_button:
                 b64_data = base64.b64encode(file_data).decode()
                 href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
                 st.markdown(href, unsafe_allow_html=True)
+            if delete_button:
+                delete_file_from_db(uploaded_file)
+                file_path = os.path.join(upload_folder, uploaded_file)
+                os.remove(file_path)
         else:
             st.error(f"Failed to retrieve file data for {uploaded_file}.")
-            
+
 st.write("---")
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
