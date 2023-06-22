@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import uuid
 import base64
+import os
 
 # Create a SQLite database connection
 conn = sqlite3.connect('file_uploads.db')
@@ -46,11 +47,16 @@ def display_files():
 # Download file
 def download_file(filename):
     file_extension = filename.split('.')[-1]
-    with open(f'file_uploads/{filename}', 'rb') as f:
+    file_path = os.path.join('file_uploads', filename)
+    with open(file_path, 'rb') as f:
         file_data = f.read()
     base64_data = base64.b64encode(file_data).decode('utf-8')
     file_uri = f"data:image/{file_extension};base64,{base64_data}"
     st.markdown(f'<a href="{file_uri}" download>Click here to download</a>', unsafe_allow_html=True)
+
+# Create file_uploads directory if it doesn't exist
+if not os.path.exists('file_uploads'):
+    os.makedirs('file_uploads')
 
 # Sidebar buttons for file upload
 uploaded_files = st.sidebar.file_uploader("Upload PDF or DOC files", accept_multiple_files=True, type=['pdf', 'doc'])
