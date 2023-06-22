@@ -1,5 +1,6 @@
 import streamlit as st
 import sqlite3
+import uuid
 
 # Create a SQLite database connection
 conn = sqlite3.connect('file_uploads.db')
@@ -38,7 +39,8 @@ def display_files():
             st.button('Download', key=file[0], on_click=download_file, args=(file[0],))
         elif file[1] == 'image':
             st.image(file[0])
-            st.button('Download', key=f'download_{file[0]}', on_click=download_file, args=(file[0],))
+            unique_key = str(uuid.uuid4())
+            st.button('Download', key=f'download_{file[0]}_{unique_key}', on_click=download_file, args=(file[0],))
 
 # Download file
 def download_file(filename):
