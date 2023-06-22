@@ -22,13 +22,13 @@ st.set_page_config(
 
 # Display title
 st.title('Bac 2024 doc')
-
+st.header("Images")
 # Create a button to upload an image
 uploaded_file = st.file_uploader("Upload an image")
-
+st.header("Liens")
 # Create an input field to enter a URL (optional)
 url = st.text_input("Enter a URL (optional)")
-
+st.header("Images Uploaded")
 # Save the uploaded image or URL to the database
 if uploaded_file or url:
     if uploaded_file:
