@@ -1,5 +1,7 @@
 import streamlit as st
 import sqlite3
+import requests
+from io import BytesIO
 
 # Create a connection to the SQLite database
 conn = sqlite3.connect('image_urls.db')
@@ -46,10 +48,14 @@ for result in results:
     if image_blob:
         st.image(image_blob, caption="Uploaded Image")
     elif image_url:
-        st.image(image_url, caption="URL Image")
+        response = requests.get(image_url)
+        if response.status_code == 200:
+            image_data = response.content
+            st.image(image_data, caption="URL Image")
 
-        # Create a button to download the image
-        st.download_button("Download Image", data=image_url, file_name="image.png")
+            # Create a button to download the image
+            file_name = f"image_{image_id}.png"
+            st.download_button("Download Image", data=image_data, file_name=file_name)
 
 # Close the database connection
 cursor.close()
