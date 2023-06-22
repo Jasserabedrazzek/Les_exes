@@ -22,7 +22,7 @@ conn = sqlite3.connect("urls.db")
 c = conn.cursor()
 
 # Create a table to store URLs if it doesn't exist
-c.execute("CREATE TABLE IF NOT EXISTS urls (url TEXT)")
+c.execute('''CREATE TABLE IF NOT EXISTS urls (url text)''')
 
 # Function to handle file uploads
 def handle_file_upload(file, file_type):
@@ -45,21 +45,16 @@ def download_file(file_path, file_name):
 def save_url(url):
     c.execute("INSERT INTO urls (url) VALUES (?)", (url,))
     conn.commit()
-    st.success("URL saved successfully!")
 
 # Display the title
 st.title('Bac 2024 doc')
 
-# Display the URL input field and save button
-url = st.text_input("Enter a URL:")
-if st.button("Save URL") and url:
+# Display the URL input and save button
+url = st.text_input("Enter URL")
+save_button = st.button("Save URL")
+if save_button and url:
     save_url(url)
-
-# Display the upload buttons
-file_type = st.radio("Select file type:", ("pdf", "doc", "image"))
-file = st.file_uploader(f"Upload {file_type.capitalize()} file")
-if file is not None:
-    handle_file_upload(file, file_type)
+    st.success("URL saved!")
 
 # Display the uploaded files
 uploaded_files = os.listdir(UPLOAD_DIRECTORY)
@@ -73,6 +68,13 @@ for file_name in uploaded_files:
         image = Image.open(file_path)
         st.image(image)
         download_file(file_path, file_name)
+
+# Display the saved URLs
+st.subheader("Saved URLs")
+c.execute("SELECT * FROM urls")
+urls = c.fetchall()
+for url in urls:
+    st.write(url[0])
 
 # Close the database connection
 conn.close()
