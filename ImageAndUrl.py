@@ -23,12 +23,15 @@ st.set_page_config(
 # Display title
 st.title('Bac 2024 doc')
 st.header("Images")
+
 # Create a button to upload an image
 uploaded_file = st.file_uploader("Upload an image")
 st.header("Liens")
+
 # Create an input field to enter a URL (optional)
 url = st.text_input("Enter a URL (optional)")
 st.header("Images Uploaded")
+
 # Save the uploaded image or URL to the database
 if uploaded_file or url:
     if uploaded_file:
@@ -38,16 +41,25 @@ if uploaded_file or url:
         cursor.execute("INSERT INTO images (url) VALUES (?)", (url,))
     conn.commit()
 
-# Retrieve the stored image or URL from the database
+# Retrieve the stored images or URLs from the database
 cursor.execute("SELECT * FROM images")
-result = cursor.fetchone()
-if result:
-    image_id, image_blob, image_url = result
-    if image_blob:
-        st.image(image_blob, caption="Uploaded Image")
-        st.download_button("Download Image", data=image_blob, file_name="image.png")
-    elif image_url:
-        st.image(image_url, caption="URL Image")
+results = cursor.fetchall()
+
+# Display the images in columns
+if results:
+    num_columns = 3  # Number of columns to display the images
+    chunks = [results[i:i + num_columns] for i in range(0, len(results), num_columns)]
+    
+    for chunk in chunks:
+        columns = st.beta_columns(num_columns)
+        for image_id, image_blob, image_url in chunk:
+            if image_blob:
+                columns[image_id % num_columns].image(image_blob, caption="Uploaded Image")
+                columns[image_id % num_columns].download_button(
+                    f"Download Image {image_id}", data=image_blob, file_name=f"image_{image_id}.png"
+                )
+            elif image_url:
+                columns[image_id % num_columns].image(image_url, caption="URL Image")
 
 # Close the database connection
 cursor.close()
