@@ -1,19 +1,11 @@
 import streamlit as st
-import sqlite3
-import uuid
-import base64
 import os
+import shutil
 
-# Create a SQLite database connection
-conn = sqlite3.connect('file_uploads.db')
-c = conn.cursor()
-
-# Create a table to store file uploads
-c.execute('''CREATE TABLE IF NOT EXISTS uploads
-             (id INTEGER PRIMARY KEY AUTOINCREMENT,
-              filename TEXT,
-              filetype TEXT)''')
-conn.commit()
+# Create a directory to store uploaded files
+UPLOAD_DIRECTORY = "uploads"
+if not os.path.exists(UPLOAD_DIRECTORY):
+    os.makedirs(UPLOAD_DIRECTORY)
 
 # Set Streamlit page configuration
 st.set_page_config(
@@ -22,52 +14,40 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
 )
+
+# Function to handle file uploads
+def handle_file_upload(file, file_type):
+    file_name = file.name
+    file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
+    with open(file_path, "wb") as f:
+        f.write(file.getbuffer())
+    if file_type == "pdf" or file_type == "doc":
+        st.success(f"File uploaded: {file_name}")
+    elif file_type == "image":
+        st.success(f"Image uploaded: {file_name}")
+
+# Function to download a file
+def download_file(file_path):
+    with open(file_path, "rb") as f:
+        file_bytes = f.read()
+    st.download_button("Download", file_bytes, file_path)
+
+# Display the title
 st.title('Bac 2024 doc')
 
-# File upload and database insertion functions
-def upload_file(file, filetype):
-    with open(file.name, 'wb') as f:
-        f.write(file.getbuffer())
-    c.execute("INSERT INTO uploads (filename, filetype) VALUES (?, ?)", (file.name, filetype))
-    conn.commit()
+# Display the upload buttons
+file_type = st.radio("Select file type:", ("pdf", "doc", "image"))
+file = st.file_uploader(f"Upload {file_type.capitalize()} file")
+if file is not None:
+    handle_file_upload(file, file_type)
 
-# Display uploaded files and provide download buttons
-def display_files():
-    c.execute("SELECT filename, filetype FROM uploads")
-    files = c.fetchall()
-    for file in files:
-        st.write(file[0])
-        if file[1] in ('pdf', 'doc'):
-            st.button('Download', key=file[0], on_click=download_file, args=(file[0],))
-        elif file[1] == 'image':
-            st.image(file[0])
-            unique_key = str(uuid.uuid4())
-            st.button('Download', key=f'download_{file[0]}_{unique_key}', on_click=download_file, args=(file[0],))
+# Display the uploaded files
+uploaded_files = os.listdir(UPLOAD_DIRECTORY)
+st.subheader("Uploaded Files")
+for file_name in uploaded_files:
+    st.write(file_name)
+    if file_name.endswith(".pdf") or file_name.endswith(".doc"):
+        download_file(os.path.join(UPLOAD_DIRECTORY, file_name))
+    elif file_name.endswith(".jpg") or file_name.endswith(".jpeg") or file_name.endswith(".png"):
+        st.image(os.path.join(UPLOAD_DIRECTORY, file_name))
 
-# Download file
-def download_file(filename):
-    file_extension = filename.split('.')[-1]
-    file_path = os.path.join('file_uploads', filename)
-    with open(file_path, 'rb') as f:
-        file_data = f.read()
-    base64_data = base64.b64encode(file_data).decode('utf-8')
-    file_uri = f"data:image/{file_extension};base64,{base64_data}"
-    st.markdown(f'<a href="{file_uri}" download>Click here to download</a>', unsafe_allow_html=True)
-
-# Create file_uploads directory if it doesn't exist
-if not os.path.exists('file_uploads'):
-    os.makedirs('file_uploads')
-
-# Sidebar buttons for file upload
-uploaded_files = st.sidebar.file_uploader("Upload PDF or DOC files", accept_multiple_files=True, type=['pdf', 'doc'])
-if uploaded_files is not None:
-    for file in uploaded_files:
-        upload_file(file, file.type.split('/')[-1])
-
-uploaded_images = st.sidebar.file_uploader("Upload Image files", accept_multiple_files=True, type=['png', 'jpg', 'jpeg'])
-if uploaded_images is not None:
-    for image in uploaded_images:
-        upload_file(image, 'image')
-
-# Display uploaded files
-display_files()
