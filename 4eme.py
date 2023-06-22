@@ -12,7 +12,7 @@ if not os.path.exists(UPLOAD_DIRECTORY):
 # Set Streamlit page configuration
 st.set_page_config(
     page_title="4eme secondaire Pdf",
-    page_icon="",
+    page_icon=":blue_book:",
     layout="centered",
     initial_sidebar_state="expanded",
 )
@@ -84,3 +84,8 @@ for url in urls:
 
 # Close the database connection
 conn.close()
+
+st.write("---")
+st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
+st.write("Jasser ben abed razzek ")
+st.write("Rabi ynajhna kol amin :open_hands:")
