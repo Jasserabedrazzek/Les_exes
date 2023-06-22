@@ -36,6 +36,14 @@ def download_file(file_path, file_name):
 # Display the title
 st.title('Bac 2024 doc')
 
+# Display the URL input and save button
+url = st.text_input("Enter a URL")
+save_url = st.button("Save URL")
+
+# Save the URL to the page when the button is clicked
+if save_url:
+    st.write(url)
+
 # Display the upload buttons
 file_type = st.radio("Select file type:", ("pdf", "doc", "image"))
 file = st.file_uploader(f"Upload {file_type.capitalize()} file")
