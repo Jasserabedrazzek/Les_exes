@@ -87,5 +87,6 @@ conn.close()
 
 st.write("---")
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
-st.write("Jasser ben abed razzek ")
-st.write("Rabi ynajhna kol amin :open_hands:")
+st.write("Rabi ynajhna kol, amin ya rabi :open_hands:")
+st.write("Jasser ")
+st.write("Bac 2024 admis")
