@@ -44,13 +44,15 @@ def download_file(filename):
     st.markdown(f'<a href="file_uploads/{filename}" download>Click here to download</a>', unsafe_allow_html=True)
 
 # Sidebar buttons for file upload
-uploaded_file = st.sidebar.file_uploader("Upload PDF or DOC file", type=['pdf', 'doc'])
-if uploaded_file is not None:
-    upload_file(uploaded_file, uploaded_file.type.split('/')[-1])
+uploaded_files = st.sidebar.file_uploader("Upload PDF or DOC files", accept_multiple_files=True, type=['pdf', 'doc'])
+if uploaded_files is not None:
+    for file in uploaded_files:
+        upload_file(file, file.type.split('/')[-1])
 
-uploaded_image = st.sidebar.file_uploader("Upload Image file", type=['png', 'jpg', 'jpeg'])
-if uploaded_image is not None:
-    upload_file(uploaded_image, 'image')
+uploaded_images = st.sidebar.file_uploader("Upload Image files", accept_multiple_files=True, type=['png', 'jpg', 'jpeg'])
+if uploaded_images is not None:
+    for image in uploaded_images:
+        upload_file(image, 'image')
 
 # Display uploaded files
 display_files()
