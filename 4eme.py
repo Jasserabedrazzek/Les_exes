@@ -49,6 +49,16 @@ def save_url(url):
 # Display the title
 st.title('Bac 2024 doc')
 
+# Display the PDF upload button
+pdf_file = st.file_uploader("Upload PDF or DOC file", type=["pdf", "doc"])
+if pdf_file is not None:
+    handle_file_upload(pdf_file, "pdf")
+
+# Display the image upload button
+image_file = st.file_uploader("Upload Image file", type=["jpg", "jpeg", "png"])
+if image_file is not None:
+    handle_file_upload(image_file, "image")
+
 # Display the URL input and save button
 url = st.text_input("Enter URL")
 save_button = st.button("Save URL")
