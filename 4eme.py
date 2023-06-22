@@ -53,8 +53,12 @@ def save_file_to_db_with_retry(file):
 # Function to retrieve file from the database
 def retrieve_file_from_db(file_name):
     c.execute("SELECT data FROM files WHERE name=?", (file_name,))
-    file_data = c.fetchone()[0]
-    return file_data
+    result = c.fetchone()
+    if result is not None:
+        file_data = result[0]
+        return file_data
+    else:
+        st.error("Failed to retrieve file from the database.")
 
 # Create an upload button
 file = st.file_uploader("Upload files (PDF, DOC)", type=["pdf", "doc"])
@@ -71,11 +75,15 @@ if len(uploaded_files) > 0:
     st.header("Les séries")
     for uploaded_file in uploaded_files:
         file_data = retrieve_file_from_db(uploaded_file)
-        st.write(uploaded_file)
-        download_button = st.button("Download", key=uploaded_file)
-        if download_button:
-            b64_data = base64.b64encode(file_data).decode()
-            href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
-            st.markdown(href, unsafe_allow_html=True)
+        if file_data is not None:
+            st.write(uploaded_file)
+            download_button = st.button("Download", key=uploaded_file)
+            if download_button:
+                b64_data = base64.b64encode(file_data).decode()
+                href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{uploaded_file}">Click to download</a>'
+                st.markdown(href, unsafe_allow_html=True)
+        else:
+            st.error(f"Failed to retrieve file data for {uploaded_file}.")
+            
 st.write("---")
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
