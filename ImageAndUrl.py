@@ -51,7 +51,7 @@ if results:
     chunks = [results[i:i + num_columns] for i in range(0, len(results), num_columns)]
     
     for chunk in chunks:
-        columns = st.beta_columns(num_columns)
+        columns = st.columns(num_columns)
         for image_id, image_blob, image_url in chunk:
             if image_blob:
                 columns[image_id % num_columns].image(image_blob, caption="Uploaded Image")
