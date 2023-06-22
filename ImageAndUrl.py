@@ -48,17 +48,17 @@ cursor.execute('SELECT * FROM images')
 results = cursor.fetchall()
 
 for result in results:
-    if result[1].startswith('http'):
-        st.markdown(f"URL: [{result[1]}]({result[1]})")
-    else:
+    if isinstance(result[1], bytes):
         st.image(result[1])
+    else:
+        st.markdown(f"URL: [{result[1]}]({result[1]})")
 
 # Create a button to download the images
 if st.button("Download Images"):
     for result in results:
-        if not result[1].startswith('http'):
+        if isinstance(result[1], bytes):
             img_data = result[1]
-            st.download_button(f"Download Image {result[0]}", img_data, file_name=f"image{result[0]}")
+            st.download_button(f"Download Image {result[0]}", img_data, file_name=f"image{result[0]}.jpg")
 
 # Close the database connection
 cursor.close()
