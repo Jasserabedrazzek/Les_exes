@@ -1,5 +1,6 @@
 import streamlit as st
 import sqlite3
+from PIL import Image
 import requests
 from io import BytesIO
 
@@ -48,14 +49,17 @@ for result in results:
     if image_blob:
         st.image(image_blob, caption="Uploaded Image")
     elif image_url:
-        response = requests.get(image_url)
-        if response.status_code == 200:
-            image_data = response.content
-            st.image(image_data, caption="URL Image")
+        try:
+            response = requests.get(image_url)
+            if response.status_code == 200:
+                pil_image = Image.open(BytesIO(response.content))
+                st.image(pil_image, caption="URL Image")
 
-            # Create a button to download the image
-            file_name = f"image_{image_id}.png"
-            st.download_button("Download Image", data=image_data, file_name=file_name)
+                # Create a button to download the image
+                file_name = f"image_{image_id}.png"
+                st.download_button("Download Image", data=response.content, file_name=file_name)
+        except Exception as e:
+            st.error(f"Error loading image from URL: {e}")
 
 # Close the database connection
 cursor.close()
