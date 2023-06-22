@@ -45,21 +45,14 @@ if uploaded_file or url:
 cursor.execute("SELECT * FROM images")
 results = cursor.fetchall()
 
-# Display the images in columns
+# Display the images
 if results:
-    num_columns = 3  # Number of columns to display the images
-    chunks = [results[i:i + num_columns] for i in range(0, len(results), num_columns)]
-    
-    for chunk in chunks:
-        columns = st.columns(num_columns)
-        for image_id, image_blob, image_url in chunk:
-            if image_blob:
-                columns[image_id % num_columns].image(image_blob, caption="Uploaded Image")
-                columns[image_id % num_columns].download_button(
-                    f"Download Image {image_id}", data=image_blob, file_name=f"image_{image_id}.png"
-                )
-            elif image_url:
-                columns[image_id % num_columns].image(image_url, caption="URL Image")
+    for image_id, image_blob, image_url in results:
+        if image_blob:
+            st.image(image_blob, caption="Uploaded Image")
+            st.download_button("Download Image", data=image_blob, file_name="image.png")
+        elif image_url:
+            st.image(image_url, caption="URL Image")
 
 # Close the database connection
 cursor.close()
