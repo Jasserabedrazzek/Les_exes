@@ -38,18 +38,18 @@ if uploaded_file or url:
         cursor.execute("INSERT INTO images (url) VALUES (?)", (url,))
     conn.commit()
 
-# Retrieve the stored image or URL from the database
+# Retrieve and display all stored images or URLs from the database
 cursor.execute("SELECT * FROM images")
-result = cursor.fetchone()
-if result:
+results = cursor.fetchall()
+for result in results:
     image_id, image_blob, image_url = result
     if image_blob:
         st.image(image_blob, caption="Uploaded Image")
     elif image_url:
         st.image(image_url, caption="URL Image")
 
-    # Create a button to download the image
-    st.download_button("Download Image", data=image_blob, file_name="image.png")
+        # Create a button to download the image
+        st.download_button("Download Image", data=image_url, file_name="image.png")
 
 # Close the database connection
 cursor.close()
