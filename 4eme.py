@@ -42,27 +42,17 @@ def save_uploaded_file(uploaded_file, filename):
         f.write(uploaded_file.getbuffer())
 
 # Display the uploaded documents
-def display_documents():
-    c.execute("SELECT * FROM documents")
-    documents = c.fetchall()
-    if documents:
-        st.subheader("Uploaded Documents:")
-        for doc in documents:
-            download_url = get_download_url(doc[1])
-            st.markdown(f"- [{doc[1]}]({download_url})")
-
-# Get the download URL for a file
-def get_download_url(filename):
-    return f"uploads/{filename}"
+c.execute("SELECT * FROM documents")
+documents = c.fetchall()
+if documents:
+    st.subheader("Uploaded Documents:")
+    for doc in documents:
+        download_url = f"uploads/{doc[1]}"
+        st.markdown(f"- [{doc[1]}]({download_url})")
 
 # Download file function
 def download_file(filename):
     st.markdown(f'<a href="uploads/{filename}" download="{filename}">Download {filename}</a>', unsafe_allow_html=True)
-
-# Display the uploaded documents and download buttons
-display_documents()
-if st.button("Refresh"):
-    display_documents()
 
 # Display the upload file section
 st.subheader("Upload File(s):")
@@ -70,8 +60,6 @@ upload_file()
 
 # Download file section
 st.subheader("Download File(s):")
-c.execute("SELECT * FROM documents")
-documents = c.fetchall()
 for doc in documents:
     download_file(doc[1])
 
