@@ -38,6 +38,7 @@ def display_files():
             st.button('Download', key=file[0], on_click=download_file, args=(file[0],))
         elif file[1] == 'image':
             st.image(file[0])
+            st.button('Download', key=f'download_{file[0]}', on_click=download_file, args=(file[0],))
 
 # Download file
 def download_file(filename):
