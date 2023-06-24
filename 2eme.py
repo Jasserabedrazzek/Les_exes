@@ -49,16 +49,8 @@ def save_url(url):
 # Display the title
 st.title('Bac 2024 doc')
 
-# Display the file upload section for PDF or DOC files
-st.subheader("Upload PDF or DOC")
-file = st.file_uploader("Upload PDF or DOC file", accept_multiple_files=True)
-if file is not None:
-    for uploaded_file in file:
-        handle_file_upload(uploaded_file)
-
-# Display the file upload section for images
-st.subheader("Upload Images")
-file = st.file_uploader("Upload Image file", accept_multiple_files=True)
+# Display the file upload section
+file = st.file_uploader("Upload PDF, DOC, or Image file", accept_multiple_files=True)
 if file is not None:
     for uploaded_file in file:
         handle_file_upload(uploaded_file)
@@ -77,8 +69,10 @@ for file_name in uploaded_files:
     st.write(file_name)
     file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
     if file_name.endswith((".pdf", ".doc")):
+        st.header("PDF or Doc")
         download_file(file_path, file_name)
     elif file_name.endswith((".jpg", ".jpeg", ".png")):
+        st.header('Images')
         image = Image.open(file_path)
         st.image(image)
         download_file(file_path, file_name)
