@@ -74,13 +74,13 @@ st.subheader("Uploaded Files")
 for file_name in uploaded_files:
     st.write(file_name)
     if file_name.endswith((".pdf", ".doc")):
-        file_path = os.path.join(PDF_DIRECTORY, file_name)
-        download_file(file_path, file_name)
+        pdf_path = os.path.join(PDF_DIRECTORY, file_name)
+        download_file(pdf_path, file_name)
     elif file_name.endswith((".jpg", ".jpeg", ".png")):
-        file_path = os.path.join(IMAGE_DIRECTORY, file_name)
-        image = Image.open(file_path)
+        image_path = os.path.join(IMAGE_DIRECTORY, file_name)
+        image = Image.open(image_path)
         st.image(image)
-        download_file(file_path, file_name)
+        download_file(image_path, file_name)
 
 # Display the saved URLs
 st.subheader("Saved URLs")
