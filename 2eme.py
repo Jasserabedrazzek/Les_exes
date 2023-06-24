@@ -4,13 +4,10 @@ import shutil
 from PIL import Image
 import sqlite3
 
-# Create directories to store uploaded files
-PDF_DIRECTORY = "pdf"
-IMAGE_DIRECTORY = "image"
-if not os.path.exists(PDF_DIRECTORY):
-    os.makedirs(PDF_DIRECTORY)
-if not os.path.exists(IMAGE_DIRECTORY):
-    os.makedirs(IMAGE_DIRECTORY)
+# Create a directory to store uploaded files
+UPLOAD_DIRECTORY = "uploads"
+if not os.path.exists(UPLOAD_DIRECTORY):
+    os.makedirs(UPLOAD_DIRECTORY)
 
 # Set Streamlit page configuration
 st.set_page_config(
@@ -30,15 +27,12 @@ c.execute('''CREATE TABLE IF NOT EXISTS urls (url text)''')
 # Function to handle file uploads
 def handle_file_upload(file):
     file_name = file.name
+    file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
+    with open(file_path, "wb") as f:
+        f.write(file.getbuffer())
     if file_name.endswith((".pdf", ".doc")):
-        file_path = os.path.join(PDF_DIRECTORY, file_name)
-        with open(file_path, "wb") as f:
-            f.write(file.getbuffer())
         st.success(f"File uploaded: {file_name}")
     elif file_name.endswith((".jpg", ".jpeg", ".png")):
-        file_path = os.path.join(IMAGE_DIRECTORY, file_name)
-        with open(file_path, "wb") as f:
-            f.write(file.getbuffer())
         st.success(f"Image uploaded: {file_name}")
 
 # Function to download a file
@@ -55,8 +49,16 @@ def save_url(url):
 # Display the title
 st.title('Bac 2024 doc')
 
-# Display the file upload section
-file = st.file_uploader("Upload PDF, DOC, or Image file", accept_multiple_files=True)
+# Display the file upload section for PDF or DOC files
+st.subheader("Upload PDF or DOC")
+file = st.file_uploader("Upload PDF or DOC file", accept_multiple_files=True)
+if file is not None:
+    for uploaded_file in file:
+        handle_file_upload(uploaded_file)
+
+# Display the file upload section for images
+st.subheader("Upload Images")
+file = st.file_uploader("Upload Image file", accept_multiple_files=True)
 if file is not None:
     for uploaded_file in file:
         handle_file_upload(uploaded_file)
@@ -69,18 +71,17 @@ if save_button and url:
     st.success("URL saved!")
 
 # Display the uploaded files
-uploaded_files = os.listdir(PDF_DIRECTORY) + os.listdir(IMAGE_DIRECTORY)
+uploaded_files = os.listdir(UPLOAD_DIRECTORY)
 st.subheader("Uploaded Files")
 for file_name in uploaded_files:
     st.write(file_name)
+    file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
     if file_name.endswith((".pdf", ".doc")):
-        pdf_path = os.path.join(PDF_DIRECTORY, file_name)
-        download_file(pdf_path, file_name)
+        download_file(file_path, file_name)
     elif file_name.endswith((".jpg", ".jpeg", ".png")):
-        image_path = os.path.join(IMAGE_DIRECTORY, file_name)
-        image = Image.open(image_path)
+        image = Image.open(file_path)
         st.image(image)
-        download_file(image_path, file_name)
+        download_file(file_path, file_name)
 
 # Display the saved URLs
 st.subheader("Saved URLs")
@@ -96,4 +97,4 @@ st.write("---")
 st.markdown("Copyright © 2023 [Edu](#) . All Rights Reserved.")
 st.write("Rabi ynajhna kol, amin ya rabi :open_hands:")
 st.write("Jasser ")
-st.write("Bac 2024 admis") 
+st.write("Bac 2024 admis")
